@@ -4,7 +4,6 @@ local playerRedZone = nil
 local redZoneBlips = {}
 local existingRedZones = {}
 
--- Function to check if the player is a gang member
 function IsPlayerGangMember()
     local playerGang = QBCore.Functions.GetPlayerData().gang
     return playerGang and playerGang.name ~= "none"
@@ -23,7 +22,6 @@ RegisterCommand('redzone', function()
         local distanceToActiveRedZone = #(playerPos - playerRedZone)
 
         if distanceToActiveRedZone <= Config.RedZoneRadius then
-            -- Inside the active red zone, delete all red zones associated with the player
             TriggerServerEvent('redzone:removeZone', playerRedZone)
         else
             QBCore.Functions.Notify('First delete your existing redzone to create a new one.', 'error')
@@ -33,7 +31,6 @@ RegisterCommand('redzone', function()
     end
 end, false)
 
--- Event to create a red zone on the client side
 RegisterNetEvent('redzone:createZone')
 AddEventHandler('redzone:createZone', function(pos, radius, isPlayerRedZone)
     local blip = AddBlipForRadius(pos.x, pos.y, pos.z, radius)
@@ -49,7 +46,6 @@ AddEventHandler('redzone:createZone', function(pos, radius, isPlayerRedZone)
     end
 end)
 
--- Event to remove all red zones associated with the player on the client side
 RegisterNetEvent('redzone:removeZone')
 AddEventHandler('redzone:removeZone', function(pos)
     for i = #existingRedZones, 1, -1 do

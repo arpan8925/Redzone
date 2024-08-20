@@ -2,7 +2,6 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 local activeRedZones = {}
 
--- Handle the creation of a red zone
 RegisterNetEvent('redzone:createZone')
 AddEventHandler('redzone:createZone', function(pos, radius)
     local src = source
@@ -19,7 +18,6 @@ AddEventHandler('redzone:createZone', function(pos, radius)
     TriggerClientEvent('redzone:createZone', -1, pos, radius, false)
 end)
 
--- Handle the removal of a red zone
 RegisterNetEvent('redzone:removeZone')
 AddEventHandler('redzone:removeZone', function(pos)
     local src = source
