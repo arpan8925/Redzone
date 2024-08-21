@@ -7,11 +7,6 @@ AddEventHandler('arp-gang:server:createZone', function(pos, radius)
     local src = source
     local playerId = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
 
-    if activeRedZones[playerId] then
-        TriggerClientEvent('QBCore:Notify', src, 'First delete your existing redzone to create a new one.', 'error')
-        return
-    end
-
     activeRedZones[playerId] = pos
 
     TriggerClientEvent('arp-gang:client:createZone', src, pos, radius, true)
