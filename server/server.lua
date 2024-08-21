@@ -2,8 +2,8 @@ local QBCore = exports['qb-core']:GetCoreObject()
 
 local activeRedZones = {}
 
-RegisterNetEvent('redzone:createZone')
-AddEventHandler('redzone:createZone', function(pos, radius)
+RegisterNetEvent('arp-gang:server:createZone')
+AddEventHandler('arp-gang:server:createZone', function(pos, radius)
     local src = source
     local playerId = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
 
@@ -14,18 +14,18 @@ AddEventHandler('redzone:createZone', function(pos, radius)
 
     activeRedZones[playerId] = pos
 
-    TriggerClientEvent('redzone:createZone', src, pos, radius, true)
-    TriggerClientEvent('redzone:createZone', -1, pos, radius, false)
+    TriggerClientEvent('arp-gang:client:createZone', src, pos, radius, true)
+    TriggerClientEvent('arp-gang:client:createZone', -1, pos, radius, false)
 end)
 
-RegisterNetEvent('redzone:removeZone')
-AddEventHandler('redzone:removeZone', function(pos)
+RegisterNetEvent('arp-gang:server:removeZone')
+AddEventHandler('arp-gang:server:removeZone', function(pos)
     local src = source
     local playerId = QBCore.Functions.GetPlayer(src).PlayerData.citizenid
 
     if activeRedZones[playerId] then
         activeRedZones[playerId] = nil
-        TriggerClientEvent('redzone:removeZone', -1, pos)
+        TriggerClientEvent('arp-gang:client:removeZone', -1, pos)
     else
         TriggerClientEvent('QBCore:Notify', src, 'No active redzone found.', 'error')
     end

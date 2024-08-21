@@ -22,17 +22,17 @@ RegisterCommand('redzone', function()
         local distanceToActiveRedZone = #(playerPos - playerRedZone)
 
         if distanceToActiveRedZone <= Config.RedZoneRadius then
-            TriggerServerEvent('redzone:removeZone', playerRedZone)
+            TriggerServerEvent('arp-gang:server:removeZone', playerRedZone)
         else
-            QBCore.Functions.Notify('First delete your existing redzone to create a new one.', 'error')
+            QBCore.Functions.Notify('First delete your existing RedZone to create a new one.', 'error')
         end
     else
-        TriggerServerEvent('redzone:createZone', playerPos, Config.RedZoneRadius)
+        TriggerServerEvent('arp-gang:server:createZone', playerPos, Config.RedZoneRadius)
     end
 end, false)
 
-RegisterNetEvent('redzone:createZone')
-AddEventHandler('redzone:createZone', function(pos, radius, isPlayerRedZone)
+RegisterNetEvent('arp-gang:client:createZone')
+AddEventHandler('arp-gang:client:createZone', function(pos, radius, isPlayerRedZone)
     local blip = AddBlipForRadius(pos.x, pos.y, pos.z, radius)
     SetBlipColour(blip, 1)
     SetBlipAlpha(blip, 128)
@@ -42,12 +42,12 @@ AddEventHandler('redzone:createZone', function(pos, radius, isPlayerRedZone)
 
     if isPlayerRedZone then
         playerRedZone = pos
-        QBCore.Functions.Notify('Redzone activated at your location', 'success')
+        QBCore.Functions.Notify('RedZone activated at your location', 'success')
     end
 end)
 
-RegisterNetEvent('redzone:removeZone')
-AddEventHandler('redzone:removeZone', function(pos)
+RegisterNetEvent('arp-gang:client:removeZone')
+AddEventHandler('arp-gang:client:removeZone', function(pos)
     for i = #existingRedZones, 1, -1 do
         local zone = existingRedZones[i]
         if zone.pos == pos then
@@ -59,7 +59,7 @@ AddEventHandler('redzone:removeZone', function(pos)
 
     if playerRedZone and playerRedZone == pos then
         playerRedZone = nil
+        QBCore.Functions.Notify('RedZone Removed', 'success')
     end
 
-    QBCore.Functions.Notify('Redzone deactivated', 'success')
 end)
