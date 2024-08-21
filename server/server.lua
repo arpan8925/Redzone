@@ -22,6 +22,6 @@ AddEventHandler('arp-gang:server:removeZone', function(pos)
         activeRedZones[playerId] = nil
         TriggerClientEvent('arp-gang:client:removeZone', -1, pos)
     else
-        TriggerClientEvent('QBCore:Notify', src, 'No active redzone found.', 'error')
+        TriggerClientEvent('QBCore:Notify', src, 'Already a Redzone Activated of Another Player', 'error')
     end
 end)
