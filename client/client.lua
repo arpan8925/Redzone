@@ -18,32 +18,33 @@ RegisterCommand('redzone', function()
     local playerPed = PlayerPedId()
     local playerPos = GetEntityCoords(playerPed)
 
-    -- Check if the player is within any existing RedZone
     for _, zone in ipairs(existingRedZones) do
         local distanceToZone = #(playerPos - zone.pos)
         if distanceToZone <= zone.radius then
-            -- If the player is within an existing RedZone, remove it
             TriggerServerEvent('arp-gang:server:removeZone', zone.pos)
             return
         end
     end
 
-    -- If no existing RedZone was found, create a new one
     TriggerServerEvent('arp-gang:server:createZone', playerPos, Config.RedZoneRadius)
 end, false)
 
 RegisterNetEvent('arp-gang:client:createZone')
 AddEventHandler('arp-gang:client:createZone', function(pos, radius, isPlayerRedZone)
     local blip = AddBlipForRadius(pos.x, pos.y, pos.z, radius)
-    SetBlipColour(blip, 1)
+    
+    SetBlipColour(blip, 75)
     SetBlipAlpha(blip, 128)
+
+    BeginTextCommandSetBlipName('STRING')
+    AddTextComponentString('REDZONE')
 
     table.insert(redZoneBlips, blip)
     table.insert(existingRedZones, { pos = pos, radius = radius })
 
     if isPlayerRedZone then
         playerRedZone = pos
-        QBCore.Functions.Notify('RedZone activated at your location', 'success')
+        QBCore.Functions.Notify('RedZone activated at your location. It will expire in 60 seconds.', 'success')
     end
 end)
 
