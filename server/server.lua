@@ -49,3 +49,4 @@ AddEventHandler('arp-gang:server:removeZone', function(pos)
         TriggerClientEvent('QBCore:Notify', src, 'A RedZone is already active in this location', 'error')
     end
 end)
+

@@ -9,6 +9,34 @@ function IsPlayerGangMember()
     return playerGang and playerGang.name ~= "none"
 end
 
+Citizen.CreateThread(function()
+    local textDisplayed = false
+    while true do
+        Citizen.Wait(500)
+        local playerPed = PlayerPedId()
+        local playerPos = GetEntityCoords(playerPed)
+        local isInZone = false
+
+        for _, zone in ipairs(existingRedZones) do
+            local distanceToZone = #(playerPos - zone.pos)
+            if distanceToZone <= zone.radius then
+                isInZone = true
+                if not textDisplayed then
+                    exports['qb-drawtext']:DrawText('You are inside of a Redzone', 'center')
+                    textDisplayed = true
+                end
+                break
+            end
+        end
+
+        if not isInZone and textDisplayed then
+            exports['qb-drawtext']:HideText()
+            textDisplayed = false
+        end
+    end
+end)
+
+
 RegisterCommand('redzone', function()
     if not IsPlayerGangMember() then
         QBCore.Functions.Notify('You are not authorized to use this command', 'error')
