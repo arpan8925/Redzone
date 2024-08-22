@@ -1,6 +1,7 @@
 local QBCore = exports['qb-core']:GetCoreObject()
 
 local activeRedZones = {}
+local redzonetime = 100000
 
 RegisterNetEvent('arp-gang:server:createZone')
 AddEventHandler('arp-gang:server:createZone', function(pos, radius)
@@ -24,10 +25,11 @@ AddEventHandler('arp-gang:server:createZone', function(pos, radius)
         creationTime = os.time()
     }
 
-    TriggerClientEvent('arp-gang:client:createZone', src, pos, radius, true)
-    TriggerClientEvent('arp-gang:client:createZone', -1, pos, radius, false)
+    -- Notify the client to create the redzone and the blip
+    TriggerClientEvent('arp-gang:client:createZone', src, pos, radius, true, redzonetime)
+    TriggerClientEvent('arp-gang:client:createZone', -1, pos, radius, false, redzonetime)
 
-    SetTimeout(1500000, function()
+    SetTimeout(redzonetime, function()
         if activeRedZones[playerId] and activeRedZones[playerId].pos == pos then
             activeRedZones[playerId] = nil
             TriggerClientEvent('arp-gang:client:removeZone', -1, pos)
@@ -44,9 +46,9 @@ AddEventHandler('arp-gang:server:removeZone', function(pos)
 
     if activeRedZones[playerId] then
         activeRedZones[playerId] = nil
+        -- Notify the client to remove the redzone and the blip
         TriggerClientEvent('arp-gang:client:removeZone', -1, pos)
     else
         TriggerClientEvent('QBCore:Notify', src, 'A RedZone is already active in this location', 'error')
     end
 end)
-
